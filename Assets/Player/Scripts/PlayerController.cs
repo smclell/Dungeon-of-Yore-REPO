@@ -4,47 +4,75 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float playerSpeedX;
-    [SerializeField] private float playerSpeedY;
+    [SerializeField] private float playerSpeed;
     [SerializeField] public GameObject playerMeleeAttack;
+    [SerializeField] public Rigidbody2D attackFollow;
+    [SerializeField] public Transform attackPoint;
+
+    [SerializeField] public GameObject playerFireball;
+    [SerializeField] public float fireballLength;
+    public float fireballTimer;
+    [SerializeField] public float fireballSpeed = 10f;
+
+    public Rigidbody2D rb;
+    public Camera cam;
+    public bool abilityUsage = false;
+
+    Vector2 movement;
+    Vector2 mousePos;
 
     // Update is called once per frame
     void Update()
     {
-        #region Movement
+        #region General
 
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
-
-        Vector3 movement = new Vector3(playerSpeedX * inputX, playerSpeedY * inputY, 0);
-
-        movement *= Time.deltaTime;
-
-        transform.Translate(movement);
-        transform.rotation = Quaternion.identity;
+        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
         #endregion
 
-        #region Attack
+        #region Movement
+
+        movement.x = Input.GetAxis("Horizontal");
+        movement.y = Input.GetAxis("Vertical");
+
+        #endregion
+
+        #region Melee Attack
 
         if (Input.GetButtonDown("Fire1") && !playerMeleeAttack.activeSelf)
         {
-            Vector3 positionMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            positionMouse.z = transform.position.z;
-
-            Vector3 towardsMouseFromPlayer = positionMouse - transform.position;
-
-            Quaternion targetRotation = Quaternion.LookRotation(positionMouse);
-
-            targetRotation.x = 0;
-            targetRotation.y = 0;
-
-            Vector3 vectorAttack = ((Quaternion.AngleAxis(targetRotation.z, Vector3.forward) * gameObject.transform.rotation) * Vector3.left * 2) + transform.position;
-
-            playerMeleeAttack.transform.position = vectorAttack;
             playerMeleeAttack.SetActive(true);
         }
         #endregion
+
+        #region Ability 1 / Fireball
+
+        if (abilityUsage && fireballTimer <= 0 && Input.GetButtonDown("Fire2"))
+        {
+            GameObject fireball = Instantiate(playerFireball, attackPoint.position, attackPoint.rotation);
+            Rigidbody2D fireballRB = fireball.GetComponent<Rigidbody2D>();
+            fireballRB.AddForce(attackPoint.right * fireballSpeed, ForceMode2D.Impulse);
+            fireballTimer = fireballLength;
+        }
+
+        #endregion
+    }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement * playerSpeed * Time.fixedDeltaTime);
+        attackFollow.position = rb.position;
+
+        if (!playerMeleeAttack.activeSelf)
+        {
+            Vector2 lookDir = mousePos - rb.position;
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+            attackFollow.rotation = angle;
+        }
+
+        if (abilityUsage)
+        {
+            fireballTimer -= Time.fixedDeltaTime;
+        }
     }
 }
