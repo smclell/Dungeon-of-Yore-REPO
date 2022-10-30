@@ -16,7 +16,9 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb;
     public Camera cam;
-    public bool abilityUsage = false;
+    public Unlocks unlocks;
+
+    public int health = 100;
 
     Vector2 movement;
     Vector2 mousePos;
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
         #region Ability 1 / Fireball
 
-        if (abilityUsage && fireballTimer <= 0 && Input.GetButtonDown("Fire2"))
+        if ((bool)unlocks.unlocks[0] && fireballTimer <= 0 && Input.GetButtonDown("Fire2"))
         {
             GameObject fireball = Instantiate(playerFireball, attackPoint.position, attackPoint.rotation);
             Rigidbody2D fireballRB = fireball.GetComponent<Rigidbody2D>();
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
+
     }
 
     private void FixedUpdate()
@@ -70,9 +73,23 @@ public class PlayerController : MonoBehaviour
             attackFollow.rotation = angle;
         }
 
-        if (abilityUsage)
+        if ((bool)unlocks.unlocks[0])
         {
             fireballTimer -= Time.fixedDeltaTime;
         }
     }
+
+    #region Taking Damage
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Debug.Log("Dead");
+        }
+    }
+
+    #endregion
 }
