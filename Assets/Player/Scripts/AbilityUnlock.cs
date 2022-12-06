@@ -12,6 +12,7 @@ public class AbilityUnlock : MonoBehaviour
         if (player != null)
         {
             player.unlocks[unlockPos] = true;
+            Debug.Log(player.unlocks);
             Destroy(gameObject);
         }
     }

@@ -6,12 +6,13 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public int health = 100;
+    public int damage = 20;
 
-    public GameObject paths;
+    /*public GameObject paths;
 
     public int counterPos = 0;
-    public float speed = 3f;
-    public int damage = 20;
+    public float speed = 3f;*/
+    
 
     private NavMeshAgent agent;
     public Transform PlayerTarget;
@@ -40,16 +41,16 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        var path = paths.GetComponent<Path>();
+/*        var path = paths.GetComponent<Path>();
         Vector3 movepoint;
-        float step = speed * Time.deltaTime;
+        float step = speed * Time.deltaTime;*/
 
         float distance = Vector2.Distance(PlayerTarget.position, transform.position);
         //Debug.Log(distance);
         if (distance <= 7.5) {
             agent.SetDestination(PlayerTarget.position);
         }
-        else {
+/*        else {
             if (counterPos == 1) {
                 movepoint = path.point2.position;
             }
@@ -69,7 +70,7 @@ public class Enemy : MonoBehaviour
                     counterPos = 0;
                 }
             }
-        }        
+        }  */      
     }
 
     private void OnTriggerEnter2D(Collider2D hitInfo)

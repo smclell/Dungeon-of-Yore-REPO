@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 9097346541437897917}
   - component: {fileID: 9097346541437897794}
   - component: {fileID: 9097346541437897795}
-  - component: {fileID: -8737363358980614161}
+  - component: {fileID: 983697037}
+  - component: {fileID: -3859229474493465014}
   m_Layer: 0
   m_Name: Ice Wall
   m_TagString: Untagged
@@ -134,7 +135,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &-8737363358980614161
+--- !u!114 &983697037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +144,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 9097346541437897792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 661efe6b7628b614cbbbe623bb423103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
+  Surface2D: {fileID: 0}
+--- !u!208 &-3859229474493465014
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9097346541437897792}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.1}
+  m_MoveThreshold: 0
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0

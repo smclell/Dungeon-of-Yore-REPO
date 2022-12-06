@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unlocks : MonoBehaviour
-{
+public class Unlocks : MonoBehaviour {
     [SerializeField] private int numUnlocks = 5;
+
+    /* Unlock list
+        1. Fireball
+        2. 
+        3. 
+        4. 
+        5. Door 1
+     */
 
     public ArrayList unlocks;
     public ArrayList Unlock
