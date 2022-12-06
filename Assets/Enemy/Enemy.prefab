@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1669519201553177684}
   - component: {fileID: 1669519201553177681}
   - component: {fileID: 1669519201553177687}
+  - component: {fileID: -3238602160125452874}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -140,3 +141,26 @@ MonoBehaviour:
   paths: {fileID: 0}
   counterPos: 0
   speed: 3
+  damage: 20
+--- !u!195 &-3238602160125452874
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669519201553177682}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
