@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class Fireball : MonoBehaviour
 {
     public int damage = 60;
-
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Enemy enemy = hitInfo.GetComponent<Enemy>();

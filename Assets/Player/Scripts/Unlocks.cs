@@ -7,10 +7,12 @@ public class Unlocks : MonoBehaviour {
 
     /* Unlock list
         1. Fireball
-        2. 
+        2. Ground Slam
         3. 
         4. 
         5. Door 1
+        5. Door 2
+        5. Door 3
      */
 
     public ArrayList unlocks;
@@ -24,7 +26,7 @@ public class Unlocks : MonoBehaviour {
         unlocks = new ArrayList();
         for (int i = 0; i < numUnlocks; i++)
         {
-            unlocks.Add(false);
+            unlocks.Add(true);
         }
     }
 }

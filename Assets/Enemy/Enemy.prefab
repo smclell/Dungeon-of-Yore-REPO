@@ -138,10 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  paths: {fileID: 0}
-  counterPos: 0
-  speed: 3
   damage: 20
+  PlayerTarget: {fileID: 0}
 --- !u!195 &-3238602160125452874
 NavMeshAgent:
   m_ObjectHideFlags: 0
