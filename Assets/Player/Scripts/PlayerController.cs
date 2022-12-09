@@ -1,27 +1,42 @@
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    [SerializeField] private float playerSpeed;
-    [SerializeField] public GameObject playerMeleeAttack;
+    #region variables
+    [Space]
+    [Header("General Attack Items:")]
     [SerializeField] public Rigidbody2D attackFollow;
     [SerializeField] public Transform attackPoint;
 
+    [Space]
+    [Header("Melee Attack:")]
+    [SerializeField] public GameObject playerMeleeAttack;
+
+    [Space]
+    [Header("Fireball Stats:")]
     [SerializeField] public GameObject playerFireball;
     [SerializeField] public float fireballLength;
     public float fireballTimer;
     [SerializeField] public float fireballSpeed = 10f;
 
+    [Space]
+    [Header("Ground Slam:")]
     [SerializeField] public GameObject playerSlam;
 
+    [Space]
+    [Header("References:")]
     public Rigidbody2D rb;
     public Camera cam;
     public Unlocks unlocks;
+    public Animator animator;
 
+    [Space]
+    [Header("Player Stats:")]
+    [SerializeField] private float playerSpeed;
     public int health = 100;
 
     private Vector2 movement;
     private Vector2 mousePos;
-
+    #endregion
     // Update is called once per frame
     private void Update() {
 
@@ -42,12 +57,17 @@ public class PlayerController : MonoBehaviour {
             movement.y = 0;
         }
 
+        animator.SetFloat("Horizontal", movement.x);
+        animator.SetFloat("Vertical", movement.y);
+        animator.SetFloat("Speed", movement.sqrMagnitude);
+
         #endregion Movement
 
         #region Melee Attack
 
         if (Input.GetButtonDown("Fire1") && !playerMeleeAttack.activeSelf) {
             playerMeleeAttack.SetActive(true);
+            animator.SetBool("Slash", true);
         }
 
         #endregion Melee Attack
@@ -74,6 +94,10 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         rb.MovePosition(rb.position + movement * playerSpeed * Time.fixedDeltaTime);
+
+        if (movement.x < 0) { transform.localScale = new Vector3(-1, 1, 1); } 
+        else { transform.localScale = Vector3.one; }
+
         attackFollow.position = rb.position;
 
         Vector2 lookDir = mousePos - rb.position;

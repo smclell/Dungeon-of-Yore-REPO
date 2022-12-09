@@ -26,7 +26,7 @@ public class Unlocks : MonoBehaviour {
         unlocks = new ArrayList();
         for (int i = 0; i < numUnlocks; i++)
         {
-            unlocks.Add(true);
+            unlocks.Add(false);
         }
     }
 }
