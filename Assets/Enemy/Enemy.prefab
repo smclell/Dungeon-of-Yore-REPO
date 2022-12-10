@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   damage: 20
+  stunTimer: 0.5
   PlayerTarget: {fileID: 0}
 --- !u!195 &-3238602160125452874
 NavMeshAgent:

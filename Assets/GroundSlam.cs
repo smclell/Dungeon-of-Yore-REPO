@@ -29,6 +29,7 @@ public class GroundSlam : MonoBehaviour {
         Enemy enemy = hitInfo.GetComponent<Enemy>();
         if (enemy != null) {
             enemy.TakeDamage(damage);
+            enemy.PauseMovement();
         }
     }
 }

@@ -1,10 +1,13 @@
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
+
     #region variables
+
     [Space]
     [Header("General Attack Items:")]
     [SerializeField] public Rigidbody2D attackFollow;
+
     [SerializeField] public Transform attackPoint;
 
     [Space]
@@ -14,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     [Space]
     [Header("Fireball Stats:")]
     [SerializeField] public GameObject playerFireball;
+
     [SerializeField] public float fireballLength;
     public float fireballTimer;
     [SerializeField] public float fireballSpeed = 10f;
@@ -25,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     [Space]
     [Header("References:")]
     public Rigidbody2D rb;
+
     public Camera cam;
     public Unlocks unlocks;
     public Animator animator;
@@ -32,11 +37,17 @@ public class PlayerController : MonoBehaviour {
     [Space]
     [Header("Player Stats:")]
     [SerializeField] private float playerSpeed;
+
     public int health = 100;
 
     private Vector2 movement;
     private Vector2 mousePos;
-    #endregion
+    private bool dead = false;
+
+    public bool animated = false;
+
+    #endregion variables
+
     // Update is called once per frame
     private void Update() {
 
@@ -48,7 +59,7 @@ public class PlayerController : MonoBehaviour {
 
         #region Movement
 
-        if (!playerSlam.activeSelf) {
+        if (!playerSlam.activeSelf || dead) {
             movement.x = Input.GetAxis("Horizontal");
             movement.y = Input.GetAxis("Vertical");
         }
@@ -67,7 +78,8 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1") && !playerMeleeAttack.activeSelf) {
             playerMeleeAttack.SetActive(true);
-            animator.SetBool("Slash", true);
+            animator.SetTrigger("Slash");
+            animated = true;
         }
 
         #endregion Melee Attack
@@ -75,10 +87,8 @@ public class PlayerController : MonoBehaviour {
         #region Ability 1 / Fireball
 
         if ((bool)unlocks.unlocks[0] && GameObject.Find("Fireball(Clone)") == null && Input.GetButtonDown("Fire2")) {
-            GameObject fireball = Instantiate(playerFireball, attackPoint.position, attackPoint.rotation);
-            Rigidbody2D fireballRB = fireball.GetComponent<Rigidbody2D>();
-            fireballRB.AddForce(attackPoint.right * fireballSpeed, ForceMode2D.Impulse);
-            fireballTimer = fireballLength;
+            animator.SetTrigger("Fireball");
+            animated = true;
         }
 
         #endregion Ability 1 / Fireball
@@ -86,7 +96,8 @@ public class PlayerController : MonoBehaviour {
         #region Ground Slam
 
         if ((bool)unlocks.unlocks[1] && !playerSlam.activeSelf && Input.GetButtonDown("Fire3")) {
-            playerSlam.SetActive(true);
+            animator.SetTrigger("Slam");
+            animated = true;
         }
 
         #endregion Ground Slam
@@ -94,26 +105,71 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         rb.MovePosition(rb.position + movement * playerSpeed * Time.fixedDeltaTime);
-
-        if (movement.x < 0) { transform.localScale = new Vector3(-1, 1, 1); } 
-        else { transform.localScale = Vector3.one; }
-
         attackFollow.position = rb.position;
 
         Vector2 lookDir = mousePos - rb.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
         attackFollow.rotation = angle;
+
+        #region Look Direction
+
+        if (animated) {
+            if (lookDir.x >= 0) {
+                transform.localScale = Vector3.one;
+            }
+            else {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+        }
+        else if (movement.x < 0) { transform.localScale = new Vector3(-1, 1, 1); }
+        else { transform.localScale = Vector3.one; }
+
+        #endregion Look Direction
     }
 
     #region Taking Damage
 
     public void TakeDamage(int damage) {
         health -= damage;
-
+        animator.SetTrigger("Hit");
         if (health <= 0) {
-            Debug.Log("Dead");
+            animator.SetTrigger("Death");
+            dead = true;
         }
     }
 
     #endregion Taking Damage
+
+    #region Death
+
+    public void Death() {
+
+    }
+
+    #endregion Death
+
+    #region Spawn Slam
+
+    public void SpawnSlam() {
+        playerSlam.SetActive(true);
+    }
+
+    #endregion Spawn Slam
+
+    #region Spawn Fireball
+
+    public void SpawnFireball() {
+        GameObject fireball = Instantiate(playerFireball, attackPoint.position, attackPoint.rotation);
+        Rigidbody2D fireballRB = fireball.GetComponent<Rigidbody2D>();
+        fireballRB.AddForce(attackPoint.right * fireballSpeed, ForceMode2D.Impulse);
+        fireballTimer = fireballLength;
+    }
+
+    #endregion Spawn Fireball
+
+    #region End Of Animation
+    public void EndOfAnimation() {
+        animated = false;
+    }
+    #endregion
 }
