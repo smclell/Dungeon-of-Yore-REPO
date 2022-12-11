@@ -409,16 +409,22 @@ MonoBehaviour:
   attackPoint: {fileID: 3346141426018344179}
   playerMeleeAttack: {fileID: 1710239491026378448}
   playerFireball: {fileID: 8773704773400716427, guid: eaaee17996b3edd43a9c8ac41aac9633, type: 3}
-  fireballLength: 2
+  fireballLength: 1
   fireballTimer: 0
   fireballSpeed: 10
   playerSlam: {fileID: 8756253736131282115}
+  slamLength: 2
+  slamTimer: 0
   rb: {fileID: 7307962209077107389}
   cam: {fileID: 0}
   unlocks: {fileID: 1846558911884346434}
   animator: {fileID: 1641421535952237957}
+  healthbar: {fileID: 0}
+  deadSprite: {fileID: -5221325753502396318, guid: 28ef557c5baae48ea8a4fd05cb03f720, type: 3}
   playerSpeed: 7.5
   health: 100
+  maxHealth: 100
+  animated: 0
 --- !u!114 &1846558911884346434
 MonoBehaviour:
   m_ObjectHideFlags: 0

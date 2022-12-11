@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour {
     [Space]
     [Header("Ground Slam:")]
     [SerializeField] public GameObject playerSlam;
+    [SerializeField] public float slamLength;
+    public float slamTimer;
 
     [Space]
     [Header("References:")]
@@ -33,20 +35,29 @@ public class PlayerController : MonoBehaviour {
     public Camera cam;
     public Unlocks unlocks;
     public Animator animator;
+    public HealthBar healthbar;
+    public Sprite deadSprite;
 
     [Space]
     [Header("Player Stats:")]
     [SerializeField] private float playerSpeed;
 
-    public int health = 100;
+    public int health;
+    public int maxHealth = 100;
 
     private Vector2 movement;
     private Vector2 mousePos;
-    private bool dead = false;
+    private bool dead;
 
     public bool animated = false;
 
     #endregion variables
+
+    private void Start() {
+        health = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+        dead = false;
+    }
 
     // Update is called once per frame
     private void Update() {
@@ -59,7 +70,7 @@ public class PlayerController : MonoBehaviour {
 
         #region Movement
 
-        if (!playerSlam.activeSelf || dead) {
+        if (!(playerSlam.activeSelf || dead)) {
             movement.x = Input.GetAxis("Horizontal");
             movement.y = Input.GetAxis("Vertical");
         }
@@ -86,18 +97,26 @@ public class PlayerController : MonoBehaviour {
 
         #region Ability 1 / Fireball
 
-        if ((bool)unlocks.unlocks[0] && GameObject.Find("Fireball(Clone)") == null && Input.GetButtonDown("Fire2")) {
+        if ((bool)unlocks.unlocks[0] && fireballTimer <= 0 && Input.GetButtonDown("Fire2")) {
             animator.SetTrigger("Fireball");
             animated = true;
+            fireballTimer = fireballLength;
+        }
+        if (fireballTimer > 0) {
+            fireballTimer -= Time.deltaTime;
         }
 
         #endregion Ability 1 / Fireball
 
         #region Ground Slam
 
-        if ((bool)unlocks.unlocks[1] && !playerSlam.activeSelf && Input.GetButtonDown("Fire3")) {
+        if ((bool)unlocks.unlocks[1] && slamTimer <= 0 && Input.GetButtonDown("Fire3")) {
             animator.SetTrigger("Slam");
             animated = true;
+            slamTimer = slamLength;
+        }
+        if (slamTimer > 0) {
+            slamTimer -= Time.deltaTime;
         }
 
         #endregion Ground Slam
@@ -125,6 +144,8 @@ public class PlayerController : MonoBehaviour {
         else { transform.localScale = Vector3.one; }
 
         #endregion Look Direction
+
+        
     }
 
     #region Taking Damage
@@ -132,6 +153,8 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(int damage) {
         health -= damage;
         animator.SetTrigger("Hit");
+        healthbar.SetHealth(health);
+
         if (health <= 0) {
             animator.SetTrigger("Death");
             dead = true;
@@ -143,7 +166,8 @@ public class PlayerController : MonoBehaviour {
     #region Death
 
     public void Death() {
-
+        animator.enabled = false;
+        this.GetComponent<SpriteRenderer>().sprite = deadSprite;
     }
 
     #endregion Death
