@@ -7,6 +7,7 @@ public class UnlockDoor : MonoBehaviour
 {
     public int unlockPos;
 
+    //unlock/destroy door if player has the key
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Unlocks player = hitInfo.GetComponent<Unlocks>();

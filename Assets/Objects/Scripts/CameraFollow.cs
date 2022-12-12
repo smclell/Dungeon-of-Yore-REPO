@@ -10,7 +10,7 @@ public class CameraFollow : MonoBehaviour
     public float xOffset = 1f;
     public float yOffset = 1f;
 
-    // Update is called once per frame
+    // have camera follow player
     void Update()
     {
         Vector3 newPOS = new Vector3(target.position.x + xOffset, target.position.y + yOffset, -10f);

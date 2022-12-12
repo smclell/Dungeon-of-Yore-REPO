@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour {
     #endregion variables
 
     private void Start() {
+        //set max health and health bar
         health = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
         dead = false;
@@ -63,13 +65,13 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
 
         #region General
-
+        //get mouse position
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
         #endregion General
 
         #region Movement
-
+        //move if not dead and not in slam
         if (!(playerSlam.activeSelf || dead)) {
             movement.x = Input.GetAxis("Horizontal");
             movement.y = Input.GetAxis("Vertical");
@@ -78,7 +80,7 @@ public class PlayerController : MonoBehaviour {
             movement.x = 0;
             movement.y = 0;
         }
-
+        //animating movement
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
@@ -86,7 +88,7 @@ public class PlayerController : MonoBehaviour {
         #endregion Movement
 
         #region Melee Attack
-
+        //attack if not already attacking
         if (Input.GetButtonDown("Fire1") && !playerMeleeAttack.activeSelf) {
             playerMeleeAttack.SetActive(true);
             animator.SetTrigger("Slash");
@@ -96,26 +98,26 @@ public class PlayerController : MonoBehaviour {
         #endregion Melee Attack
 
         #region Ability 1 / Fireball
-
+        //spawn fireball if ability is unlocked and off cooldown
         if ((bool)unlocks.unlocks[0] && fireballTimer <= 0 && Input.GetButtonDown("Fire2")) {
             animator.SetTrigger("Fireball");
             animated = true;
             fireballTimer = fireballLength;
         }
-        if (fireballTimer > 0) {
+        if (fireballTimer > 0) { // update fireball timer
             fireballTimer -= Time.deltaTime;
         }
 
         #endregion Ability 1 / Fireball
 
         #region Ground Slam
-
+        //ground slam if off cooldown and unlocked
         if ((bool)unlocks.unlocks[1] && slamTimer <= 0 && Input.GetButtonDown("Fire3")) {
             animator.SetTrigger("Slam");
             animated = true;
             slamTimer = slamLength;
         }
-        if (slamTimer > 0) {
+        if (slamTimer > 0) { // update slam timer
             slamTimer -= Time.deltaTime;
         }
 
@@ -123,6 +125,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        //update attack follow position
         rb.MovePosition(rb.position + movement * playerSpeed * Time.fixedDeltaTime);
         attackFollow.position = rb.position;
 
@@ -131,7 +134,7 @@ public class PlayerController : MonoBehaviour {
         attackFollow.rotation = angle;
 
         #region Look Direction
-
+        // setting look position to follow mouse when attacking
         if (animated) {
             if (lookDir.x >= 0) {
                 transform.localScale = Vector3.one;
@@ -155,6 +158,7 @@ public class PlayerController : MonoBehaviour {
         animator.SetTrigger("Hit");
         healthbar.SetHealth(health);
 
+        //if health reaches 0, die
         if (health <= 0) {
             animator.SetTrigger("Death");
             dead = true;
@@ -167,7 +171,9 @@ public class PlayerController : MonoBehaviour {
 
     public void Death() {
         animator.enabled = false;
+        WinOrLose.win = false;
         this.GetComponent<SpriteRenderer>().sprite = deadSprite;
+        SceneManager.LoadScene("WinOrLose");
     }
 
     #endregion Death
@@ -195,5 +201,18 @@ public class PlayerController : MonoBehaviour {
     public void EndOfAnimation() {
         animated = false;
     }
+    #endregion
+
+    #region Healing
+
+    //heal for given amount and update healthbar
+    public void Heal(int heal) {
+        health += heal;
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
+        healthbar.SetHealth(health);
+    }
+
     #endregion
 }

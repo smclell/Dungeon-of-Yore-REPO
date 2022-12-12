@@ -11,11 +11,15 @@ public class Unlocks : MonoBehaviour {
         3. 
         4. 
         5. Door 1
-        5. Door 2
-        5. Door 3
+        6. Door 2
+        7. Door 3
+        8. Door 4
+        9. Door 5
+        10. Door 6
+        11. Door Final
      */
 
-    public ArrayList unlocks;
+    public ArrayList unlocks; // list of unlocks
     public ArrayList Unlock
     {
         get { return unlocks; }
@@ -23,10 +27,11 @@ public class Unlocks : MonoBehaviour {
 
     private void Start()
     {
+        //set defaults for unlocks
         unlocks = new ArrayList();
         for (int i = 0; i < numUnlocks; i++)
         {
-            unlocks.Add(true);
+            unlocks.Add(false);
         }
     }
 }

@@ -8,6 +8,7 @@ public class BreakAbilityWall : MonoBehaviour
     private int abilityBreak;
 
     private void Start() {
+        //set which ability will break wall
         switch (gameObject.name) {
             case string a when a.Contains("Ice Wall"):
                 abilityBreak = 1;
@@ -19,6 +20,7 @@ public class BreakAbilityWall : MonoBehaviour
         }
     }
 
+    //break wall based on collided entity
     private void OnTriggerEnter2D(Collider2D hitInfo) {
         string name = hitInfo.name;
         switch (abilityBreak) {

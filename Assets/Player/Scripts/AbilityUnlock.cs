@@ -5,6 +5,8 @@ using UnityEngine;
 public class AbilityUnlock : MonoBehaviour
 {
     public int unlockPos;
+
+    //unlock corresponding ability/key
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Unlocks player = hitInfo.GetComponent<Unlocks>();
@@ -12,7 +14,6 @@ public class AbilityUnlock : MonoBehaviour
         if (player != null)
         {
             player.unlocks[unlockPos] = true;
-            Debug.Log(player.unlocks);
             Destroy(gameObject);
         }
     }
